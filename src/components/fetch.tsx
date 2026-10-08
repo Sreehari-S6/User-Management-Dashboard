@@ -28,9 +28,13 @@ function Userlist(){
             return
         }
         const timer=setTimeout(async()=>{
-            const res=await fetch(`https://jsonplaceholder.typicode.com/users?name_like=${searchTerm}`);        
-            const data=await res.json();
-            setResults(data);
+            const filteredUsers = users.filter(
+            (user: any) =>
+                user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                user.email.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setResults(filteredUsers);
         }, 10);
         return() => clearTimeout(timer);
     }, [searchTerm]);
