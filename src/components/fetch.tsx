@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-
+// Search functionality with debounce
 function Userlist(){
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -35,7 +35,7 @@ function Userlist(){
         return() => clearTimeout(timer);
     }, [searchTerm]);
 
-    
+
     if (loading) {
         return <p>Loading...</p>;
     }
