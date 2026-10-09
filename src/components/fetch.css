@@ -1,0 +1,114 @@
+
+/* RESPONSIVE CHANGE 1: Main page container */
+.dashboard-container {
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  padding: 32px;
+  box-sizing: border-box;
+}
+
+/* RESPONSIVE CHANGE 2: Dashboard heading */
+.dashboard-title {
+  font-size: 36px;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+/* RESPONSIVE CHANGE 3: Search input */
+.search-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 24px;
+  box-sizing: border-box;
+}
+
+/* RESPONSIVE CHANGE 4: Sorting and filtering controls */
+.filter-controls {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.filter-controls select,
+.filter-controls button {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+/* RESPONSIVE CHANGE 5: User cards */
+.user-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+/* RESPONSIVE CHANGE 6: Individual user card */
+.user-card {
+  min-width: 0;
+  padding: 20px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  overflow-wrap: anywhere;
+}
+
+/* RESPONSIVE CHANGE 7: Tablet screens */
+@media screen and (max-width: 1024px) {
+  .dashboard-container {
+    padding: 24px;
+  }
+
+  .filter-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .user-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* RESPONSIVE CHANGE 8: Mobile screens */
+@media screen and (max-width: 600px) {
+  .dashboard-container {
+    padding: 12px;
+  }
+
+  .dashboard-title {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+
+  .filter-controls {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .user-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .user-card {
+    padding: 16px;
+  }
+}
+
+
+/* Loading spinner */
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #bfdbfe;
+  border-top: 4px solid #2563eb;
+  border-radius: 50%;
+  animation: spinner-rotate 0.8s linear infinite;
+}
+
+@keyframes spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
