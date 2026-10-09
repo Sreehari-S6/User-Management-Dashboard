@@ -1,96 +1,239 @@
-import {useEffect, useState} from 'react';
-import { Link } from 'react-router-dom';
 
-function Userlist(){
-    const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
-    const [searchTerm, setSearchTerm] = useState("");
-    const [results, setResults] = useState([])
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-    useEffect(() => {
-        async function fetchUsers(){
-            try{
-                const response = await fetch('https://jsonplaceholder.typicode.com/users');
-                const data = await response.json();
-                setUsers(data);
-                setLoading(false);
-            } catch (err) {
-                setError("Failed to fetch posts");
-                setLoading(false);
-            }
-        }
-        fetchUsers();
-    }, []);
+function Userlist() {
+  const [users, setUsers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [results, setResults] = useState<any[]>([]);
 
-    useEffect(() => {
-        if (!searchTerm) {
-            setResults([]);
-            return
-        }
-        const timer=setTimeout(async()=>{
-            const filteredUsers = users.filter(
-            (user: any) =>
-                user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  // CHANGE 1: Added sorting states
+  const [sortBy, setSortBy] = useState("name");
+  const [sortOrder, setSortOrder] = useState("asc");
+
+  // CHANGE 2: Added filtering states
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedCompany, setSelectedCompany] = useState("");
+
+  // Fetch users from API (existing functionality)
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const response = await fetch(
+          "https://jsonplaceholder.typicode.com/users"
         );
-        setResults(filteredUsers);
-        }, 10);
-        return() => clearTimeout(timer);
-    }, [searchTerm]);
 
+        // CHANGE 3: Handle HTTP errors
+        if (!response.ok) {
+          throw new Error("Failed to fetch users");
+        }
 
-    if (loading) {
-        return <p>Loading...</p>;
+        const data = await response.json();
+        setUsers(data);
+      } catch {
+        setError("Failed to fetch users");
+      } finally {
+        setLoading(false);
+      }
     }
-    if (error) {
-        return <p>{error}</p>;
+
+    fetchUsers();
+  }, []);
+
+  // Existing search functionality
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      setResults([]);
+      return;
     }
 
-   const displayedUsers = searchTerm ? results : users;
+    const timer = setTimeout(() => {
+      const filteredUsers = users.filter(
+        (user: any) =>
+          user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchTerm.toLowerCase())
+      );
 
-return (
-  <div className="min-h-screen bg-gray-100 p-6">
-    <h1 className="text-4xl font-bold text-center mb-8 text-blue-600">
-      User List
-    </h1>
+      setResults(filteredUsers);
+    }, 10);
 
-    <input
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
-      placeholder="Search users..."
-      className="w-full p-3 mb-6 border rounded-lg"
-    />
+    return () => clearTimeout(timer);
+  }, [searchTerm, users]); // CHANGE 4: Added users dependency
 
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {displayedUsers.map((user:any) => (
-        <div
-          key={user.id}
-          className="bg-white rounded-xl shadow-md p-5 hover:shadow-xl transition duration-300"
+  if (loading) {
+    return <p className="p-6 text-center">Loading...</p>;
+  }
+
+  if (error) {
+    return <p className="p-6 text-center text-red-600">{error}</p>;
+  }
+
+  const displayedUsers = searchTerm.trim() ? results : users;
+
+
+  const filteredUsers = displayedUsers.filter((user: any) => {
+    const matchesCity =
+      selectedCity === "" || user.address.city === selectedCity;
+
+    const matchesCompany =
+      selectedCompany === "" || user.company.name === selectedCompany;
+
+    return matchesCity && matchesCompany;
+  });
+
+
+  const sortedUsers = [...filteredUsers].sort((a: any, b: any) => {
+    const valueA = a[sortBy].toLowerCase();
+    const valueB = b[sortBy].toLowerCase();
+
+    const comparison = valueA.localeCompare(valueB);
+
+    return sortOrder === "asc" ? comparison : -comparison;
+  });
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-6">
+      <h1 className="text-4xl font-bold text-center mb-8 text-blue-600">
+        User Management Dashboard
+      </h1>
+
+      <input
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        placeholder="Search by name, username, or email..."
+        className="w-full p-3 mb-6 border rounded-lg bg-white"
+      />
+
+      <div className="flex flex-wrap gap-4 mb-6">
+        
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="p-3 border rounded-lg bg-white"
         >
-        <h2 className="text-xl font-bold text-gray-800 mb-2">
-  <Link
-    to={`/user/${user.id}`}
-    className="text-blue-600 hover:underline"
-  >
-    {user.name}
-  </Link>
-</h2>
+          <option value="name">Sort by Name</option>
+          <option value="username">Sort by Username</option>
+          <option value="email">Sort by Email</option>
+        </select>
 
-          <div className="space-y-1 text-gray-600">
-            <p><span className="font-semibold">Username:</span> {user.username}</p>
-            <p><span className="font-semibold">Email:</span> {user.email}</p>
-            <p><span className="font-semibold">Phone:</span> {user.phone}</p>
-            <p><span className="font-semibold">Website:</span> {user.website}</p>
-            <p><span className="font-semibold">Company:</span> {user.company.name}</p>
-            <p><span className="font-semibold">City:</span> {user.address.city}</p>
-          </div>
+        
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+          className="p-3 border rounded-lg bg-white"
+        >
+          <option value="asc">Ascending (A–Z)</option>
+          <option value="desc">Descending (Z–A)</option>
+        </select>
+
+        
+        <select
+          value={selectedCity}
+          onChange={(e) => setSelectedCity(e.target.value)}
+          className="p-3 border rounded-lg bg-white"
+        >
+          <option value="">All Cities</option>
+
+          {[...new Set(users.map((user: any) => user.address.city))]
+            .sort()
+            .map((city: string) => (
+              <option key={city} value={city}>
+                {city}
+              </option>
+            ))}
+        </select>
+
+        
+        <select
+          value={selectedCompany}
+          onChange={(e) => setSelectedCompany(e.target.value)}
+          className="p-3 border rounded-lg bg-white"
+        >
+          <option value="">All Companies</option>
+
+          {[...new Set(users.map((user: any) => user.company.name))]
+            .sort()
+            .map((company: string) => (
+              <option key={company} value={company}>
+                {company}
+              </option>
+            ))}
+        </select>
+
+        <button
+          onClick={() => {
+            setSearchTerm("");
+            setSelectedCity("");
+            setSelectedCompany("");
+          }}
+          className="px-4 py-2 border rounded-lg bg-white hover:bg-gray-200"
+        >
+          Reset
+        </button>
+      </div>
+
+      
+
+      {sortedUsers.length === 0 ? (
+        <p className="text-center text-gray-500 py-10">
+          No users found
+        </p>
+      ) : (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {sortedUsers.map((user: any) => (
+            <div
+              key={user.id}
+              className="bg-white rounded-xl shadow-md p-5 hover:shadow-xl transition duration-300"
+            >
+              {/* Existing detail-page navigation */}
+              <h2 className="text-xl font-bold text-gray-800 mb-2">
+                <Link
+                  to={`/user/${user.id}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  {user.name}
+                </Link>
+              </h2>
+
+              <div className="space-y-1 text-gray-600">
+                <p>
+                  <span className="font-semibold">Username:</span>{" "}
+                  {user.username}
+                </p>
+                <p>
+                  <span className="font-semibold">Email:</span>{" "}
+                  {user.email}
+                </p>
+                <p>
+                  <span className="font-semibold">Phone:</span>{" "}
+                  {user.phone}
+                </p>
+                <p>
+                  <span className="font-semibold">Website:</span>{" "}
+                  {user.website}
+                </p>
+                <p>
+                  <span className="font-semibold">Company:</span>{" "}
+                  {user.company.name}
+                </p>
+                <p>
+                  <span className="font-semibold">City:</span>{" "}
+                  {user.address.city}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
+
+      <footer className="text-center text-sm text-gray-500 py-6">
+        User Management Dashboard
+      </footer>
     </div>
-  </div>
-);
+  );
 }
 
 export default Userlist;
