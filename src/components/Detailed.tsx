@@ -35,11 +35,19 @@ function UserDetails() {
     fetchUser();
   }, [id]);
 
-  if (loading) {
-    return (
-        <p>Loading user details...</p>
-    );
-  }
+  
+if (loading) {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <div className="loading-spinner"></div>
+
+      <p className="mt-4 text-gray-600 font-medium">
+        Loading users...
+      </p>
+    </div>
+  );
+}
+
 
   if (error){
     return(
