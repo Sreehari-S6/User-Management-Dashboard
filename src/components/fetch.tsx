@@ -8,16 +8,12 @@ function Userlist() {
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState<any[]>([]);
-
-  // CHANGE 1: Added sorting states
   const [sortBy, setSortBy] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
-
-  // CHANGE 2: Added filtering states
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedCompany, setSelectedCompany] = useState("");
 
-  // Fetch users from API (existing functionality)
+
   useEffect(() => {
     async function fetchUsers() {
       try {
@@ -25,7 +21,7 @@ function Userlist() {
           "https://jsonplaceholder.typicode.com/users"
         );
 
-        // CHANGE 3: Handle HTTP errors
+        
         if (!response.ok) {
           throw new Error("Failed to fetch users");
         }
@@ -42,7 +38,7 @@ function Userlist() {
     fetchUsers();
   }, []);
 
-  // Existing search functionality
+
   useEffect(() => {
     if (!searchTerm.trim()) {
       setResults([]);
@@ -61,7 +57,7 @@ function Userlist() {
     }, 400);
 
     return () => clearTimeout(timer);
-  }, [searchTerm, users]); // CHANGE 4: Added users dependency
+  }, [searchTerm, users]); 
 
  
 if (loading) {
@@ -103,147 +99,108 @@ if (loading) {
 
     return sortOrder === "asc" ? comparison : -comparison;
   });
+    
+return (
+  <div className="dashboard-container">
 
-  return (
-    <div className="dashboard-container">
-      <h1 className="dashboard-title font-bold text-blue-600">
-        User Management Dashboard
-      </h1>
+    <header className="dashboard-header">
+      <h1>User Management Dashboard</h1>
+      <p>Total Users: {users.length}</p>
+    </header>
 
+   
+    <div className="search-section">
       <input
+        type="text"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         placeholder="Search by name, username, or email..."
-        className="w-full p-3 mb-6 border rounded-lg bg-white"
       />
-
-      <div className="flex flex-wrap gap-4 mb-6">
-        
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          className="control-input border rounded-lg bg-white"
-        >
-          <option value="name">Sort by Name</option>
-          <option value="username">Sort by Username</option>
-          <option value="email">Sort by Email</option>
-        </select>
-
-        
-        <select
-          value={sortOrder}
-          onChange={(e) => setSortOrder(e.target.value)}
-          className="control-input border rounded-lg bg-white"
-        >
-          <option value="asc">Ascending (A–Z)</option>
-          <option value="desc">Descending (Z–A)</option>
-        </select>
-
-        
-        <select
-          value={selectedCity}
-          onChange={(e) => setSelectedCity(e.target.value)}
-          className="control-input border rounded-lg bg-white"
-        >
-          <option value="">All Cities</option>
-
-          {[...new Set(users.map((user: any) => user.address.city))]
-            .sort()
-            .map((city: string) => (
-              <option key={city} value={city}>
-                {city}
-              </option>
-            ))}
-        </select>
-
-        
-        <select
-          value={selectedCompany}
-          onChange={(e) => setSelectedCompany(e.target.value)}
-          className="control-input border rounded-lg bg-white"
-        >
-          <option value="">All Companies</option>
-
-          {[...new Set(users.map((user: any) => user.company.name))]
-            .sort()
-            .map((company: string) => (
-              <option key={company} value={company}>
-                {company}
-              </option>
-            ))}
-        </select>
-
-        <button
-          onClick={() => {
-            setSearchTerm("");
-            setSelectedCity("");
-            setSelectedCompany("");
-          }}
-          className="control-input border rounded-lg bg-white"
-        >
-          Reset
-        </button>
-      </div>
-
-      
-
-      {sortedUsers.length === 0 ? (
-        <p className="text-center text-gray-500 py-10">
-          No users found
-        </p>
-      ) : (
-        <div className="user-grid">
-          {sortedUsers.map((user: any) => (
-            <div
-              key={user.id}
-              className="bg-white rounded-xl shadow-md p-5 hover:shadow-xl transition duration-300"
-            >
-
-              <h2 className="text-xl font-bold text-gray-800 mb-2">
-                   {user.name}
-              </h2>
-
-              <div className="space-y-1 text-gray-600">
-                <p>
-                  <span className="font-semibold">Username:</span>{" "}
-                  {user.username}
-                </p>
-                <p>
-                  <span className="font-semibold">Email:</span>{" "}
-                  {user.email}
-                </p>
-                <p>
-                  <span className="font-semibold">Phone:</span>{" "}
-                  {user.phone}
-                </p>
-                <p>
-                  <span className="font-semibold">Website:</span>{" "}
-                  {user.website}
-                </p>
-                <p>
-                  <span className="font-semibold">Company:</span>{" "}
-                  {user.company.name}
-                </p>
-                <p>
-                  <span className="font-semibold">City:</span>{" "}
-                  {user.address.city}
-                </p>
-              </div>
-              <Link
-                to={`/user/${user.id}`}
-                   className="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300">
-                  View Details
-              </Link>
-            </div>
-          ))}
-        </div>
-      )}
-
-      <footer className="text-center text-sm text-gray-500 py-6">
-        User Management Dashboard
-      </footer>
     </div>
-  );
+
+   
+    <div className="filter-section">
+      <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+        <option value="name">Sort by Name</option>
+        <option value="username">Sort by Username</option>
+        <option value="email">Sort by Email</option>
+      </select>
+
+      <select
+        value={sortOrder}
+        onChange={(e) => setSortOrder(e.target.value)}
+      >
+        <option value="asc">Ascending (A-Z)</option>
+        <option value="desc">Descending (Z-A)</option>
+      </select>
+
+      <select
+        value={selectedCity}
+        onChange={(e) => setSelectedCity(e.target.value)}
+      >
+        <option value="">All Cities</option>
+        {[...new Set(users.map((user: any) => user.address.city))]
+          .sort()
+          .map((city: string) => (
+            <option key={city} value={city}>{city}</option>
+          ))}
+      </select>
+
+      <select
+        value={selectedCompany}
+        onChange={(e) => setSelectedCompany(e.target.value)}
+      >
+        <option value="">All Companies</option>
+        {[...new Set(users.map((user: any) => user.company.name))]
+          .sort()
+          .map((company: string) => (
+            <option key={company} value={company}>{company}</option>
+          ))}
+      </select>
+
+      <button onClick={() => {
+        setSearchTerm("");
+        setSelectedCity("");
+        setSelectedCompany("");
+        setSortBy("name");
+        setSortOrder("asc");
+      }}>
+        Reset
+      </button>
+    </div>
+
+    <p className="results-count">
+      Showing {sortedUsers.length} of {users.length} users
+    </p>
+
+    {sortedUsers.length === 0 ? (
+      <p className="empty-message">No users found.</p>
+    ) : (
+      <div className="user-grid">
+        {sortedUsers.map((user: any) => (
+          <div className="user-card" key={user.id}>
+            <h2>{user.name}</h2>
+            <p><strong>Username:</strong> {user.username}</p>
+            <p><strong>Email:</strong> {user.email}</p>
+            <p><strong>Phone:</strong> {user.phone}</p>
+            <p><strong>Website:</strong> {user.website}</p>
+            <p><strong>Company:</strong> {user.company.name}</p>
+            <p><strong>City:</strong> {user.address.city}</p>
+
+            <Link to={`/user/${user.id}`} className="details-link">
+              View Details
+            </Link>
+          </div>
+        ))}
+      </div>
+    )}
+
+    <footer className="dashboard-footer">
+      User Management Dashboard
+    </footer>
+  </div>
+);
+
 }
 
 export default Userlist;
