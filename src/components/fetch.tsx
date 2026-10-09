@@ -1,4 +1,4 @@
-
+import "./fetch.css"
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -58,14 +58,24 @@ function Userlist() {
       );
 
       setResults(filteredUsers);
-    }, 10);
+    }, 400);
 
     return () => clearTimeout(timer);
   }, [searchTerm, users]); // CHANGE 4: Added users dependency
 
-  if (loading) {
-    return <p className="p-6 text-center">Loading...</p>;
-  }
+ 
+if (loading) {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <div className="loading-spinner"></div>
+
+      <p className="mt-4 text-gray-600 font-medium">
+        Loading users...
+      </p>
+    </div>
+  );
+}
+
 
   if (error) {
     return <p className="p-6 text-center text-red-600">{error}</p>;
@@ -95,8 +105,8 @@ function Userlist() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-4xl font-bold text-center mb-8 text-blue-600">
+    <div className="dashboard-container">
+      <h1 className="dashboard-title font-bold text-blue-600">
         User Management Dashboard
       </h1>
 
@@ -112,7 +122,7 @@ function Userlist() {
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="p-3 border rounded-lg bg-white"
+          className="control-input border rounded-lg bg-white"
         >
           <option value="name">Sort by Name</option>
           <option value="username">Sort by Username</option>
@@ -123,7 +133,7 @@ function Userlist() {
         <select
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value)}
-          className="p-3 border rounded-lg bg-white"
+          className="control-input border rounded-lg bg-white"
         >
           <option value="asc">Ascending (A–Z)</option>
           <option value="desc">Descending (Z–A)</option>
@@ -133,7 +143,7 @@ function Userlist() {
         <select
           value={selectedCity}
           onChange={(e) => setSelectedCity(e.target.value)}
-          className="p-3 border rounded-lg bg-white"
+          className="control-input border rounded-lg bg-white"
         >
           <option value="">All Cities</option>
 
@@ -150,7 +160,7 @@ function Userlist() {
         <select
           value={selectedCompany}
           onChange={(e) => setSelectedCompany(e.target.value)}
-          className="p-3 border rounded-lg bg-white"
+          className="control-input border rounded-lg bg-white"
         >
           <option value="">All Companies</option>
 
@@ -169,7 +179,7 @@ function Userlist() {
             setSelectedCity("");
             setSelectedCompany("");
           }}
-          className="px-4 py-2 border rounded-lg bg-white hover:bg-gray-200"
+          className="control-input border rounded-lg bg-white"
         >
           Reset
         </button>
@@ -182,13 +192,13 @@ function Userlist() {
           No users found
         </p>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="user-grid">
           {sortedUsers.map((user: any) => (
             <div
               key={user.id}
               className="bg-white rounded-xl shadow-md p-5 hover:shadow-xl transition duration-300"
             >
-              {/* Existing detail-page navigation */}
+
               <h2 className="text-xl font-bold text-gray-800 mb-2">
                 <Link
                   to={`/user/${user.id}`}
