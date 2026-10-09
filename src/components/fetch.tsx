@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
-// Search functionality with debounce
+import { Link } from 'react-router-dom';
+
 function Userlist(){
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -68,9 +69,14 @@ return (
           key={user.id}
           className="bg-white rounded-xl shadow-md p-5 hover:shadow-xl transition duration-300"
         >
-          <h2 className="text-xl font-bold text-gray-800 mb-2">
-            {user.name}
-          </h2>
+        <h2 className="text-xl font-bold text-gray-800 mb-2">
+  <Link
+    to={`/user/${user.id}`}
+    className="text-blue-600 hover:underline"
+  >
+    {user.name}
+  </Link>
+</h2>
 
           <div className="space-y-1 text-gray-600">
             <p><span className="font-semibold">Username:</span> {user.username}</p>
