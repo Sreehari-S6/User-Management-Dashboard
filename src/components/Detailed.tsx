@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import "./Detailed.css"
 
 function UserDetails() {
   const { id } = useParams();
@@ -49,184 +50,166 @@ if (loading) {
 }
 
 
-  if (error){
-    return(
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-500 text-lg">{error}</p>
-      </div>    
-    ) 
-  } 
 
- return (
-    <div className="min-h-screen bg-gray-100 p-4 sm:p-8">
-      <div className="max-w-4xl mx-auto">
-        <Link
-          to="/"
-          className="inline-block mb-6 text-blue-600 hover:underline"
-        >
-          ← Back to Users
-        </Link>
+if (loading) {
+  return (
+    <div className="details-state">
+      <div className="loading-spinner"></div>
+      <p>Loading user details...</p>
+    </div>
+  );
+}
 
-        <div className="bg-white rounded-2xl shadow-md p-6 sm:p-8 mb-6">
-          <p className="text-sm text-blue-600 font-semibold mb-2">
-            USER PROFILE
-          </p>
+if (error) {
+  return (
+    <div className="details-state error-message">
+      <p>{error}</p>
+      <Link to="/" className="back-link">
+        ← Back to Users
+      </Link>
+    </div>
+  );
+}
 
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
-            {user.name}
-          </h1>
+if (!user) return null;
 
-          <p className="text-gray-500 mt-2">
-            @{user.username}
-          </p>
+return (
+  <div className="details-container">
+    {/* CHANGE 1: Simple navigation */}
+    <Link to="/" className="back-link">
+      ← Back to Users
+    </Link>
 
-          <p className="text-gray-500 mt-1">
-            User ID: {user.id}
+    {/* CHANGE 2: User profile header */}
+    <header className="profile-header">
+      <div className="profile-avatar">
+        {user.name
+          .split(" ")
+          .map((part: string) => part[0])
+          .slice(0, 2)
+          .join("")
+          .toUpperCase()}
+      </div>
+
+      <div>
+        <p className="section-label">USER PROFILE</p>
+        <h1>{user.name}</h1>
+        <p className="profile-username">
+          @{user.username} · User ID: {user.id}
+        </p>
+      </div>
+    </header>
+
+    {/* CHANGE 3: Basic information */}
+    <section className="details-card">
+      <h2>Basic Information</h2>
+
+      <div className="details-grid">
+        <div>
+          <span>Full Name</span>
+          <p>{user.name}</p>
+        </div>
+
+        <div>
+          <span>Username</span>
+          <p>{user.username}</p>
+        </div>
+
+        <div>
+          <span>Email</span>
+          <p>
+            <a href={`mailto:${user.email}`}>{user.email}</a>
           </p>
         </div>
 
-        <section className="bg-white rounded-2xl shadow-md p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-5">
-            Basic Information
-          </h2>
+        <div>
+          <span>Phone</span>
+          <p>
+            <a href={`tel:${user.phone}`}>{user.phone}</a>
+          </p>
+        </div>
 
-          <div className="grid gap-5 sm:grid-cols-2">
-            <div>
-              <p className="text-sm text-gray-500">Full Name</p>
-              <p className="font-medium text-gray-800">{user.name}</p>
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-500">Username</p>
-              <p className="font-medium text-gray-800">{user.username}</p>
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-500">Email</p>
-              <a
-                href={`mailto:${user.email}`}
-                className="font-medium text-blue-600 break-words hover:underline"
-              >
-                {user.email}
-              </a>
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-500">Phone</p>
-              <a
-                href={`tel:${user.phone}`}
-                className="font-medium text-blue-600 break-words hover:underline"
-              >
-                {user.phone}
-              </a>
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-500">Website</p>
-              <a
-                href={`https://${user.website}`}
-                target="_blank"
-                rel="noreferrer"
-                className="font-medium text-blue-600 break-words hover:underline"
-              >
-                {user.website}
-              </a>
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-white rounded-2xl shadow-md p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-5">
-            Address Information
-          </h2>
-
-          <div className="grid gap-5 sm:grid-cols-2">
-            <div>
-              <p className="text-sm text-gray-500">Street</p>
-              <p className="font-medium text-gray-800">
-                {user.address.street}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-500">Suite</p>
-              <p className="font-medium text-gray-800">
-                {user.address.suite}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-500">City</p>
-              <p className="font-medium text-gray-800">
-                {user.address.city}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-500">Zipcode</p>
-              <p className="font-medium text-gray-800">
-                {user.address.zipcode}
-              </p>
-            </div>
-
-           
-            <div>
-              <p className="text-sm text-gray-500">Latitude</p>
-              <p className="font-medium text-gray-800">
-                {user.address.geo.lat}
-              </p>
-            </div>
-
-            
-            <div>
-              <p className="text-sm text-gray-500">Longitude</p>
-              <p className="font-medium text-gray-800">
-                {user.address.geo.lng}
-              </p>
-            </div>
-          </div>
-        </section>
-
-        
-        <section className="bg-white rounded-2xl shadow-md p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-5">
-            Company Information
-          </h2>
-
-          <div className="space-y-5">
-            <div>
-              <p className="text-sm text-gray-500">Company Name</p>
-              <p className="font-medium text-gray-800">
-                {user.company.name}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-500">Catch Phrase</p>
-              <p className="font-medium text-gray-800">
-                {user.company.catchPhrase}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-500">
-                Business Description
-              </p>
-              <p className="font-medium text-gray-800">
-                {user.company.bs}
-              </p>
-            </div>
-          </div>
-        </section>
-
-        
-        <p className="text-center text-sm text-gray-500 py-4">
-          User Management Dashboard
-        </p>
-
+        <div>
+          <span>Website</span>
+          <p>
+            <a
+              href={`https://${user.website}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {user.website}
+            </a>
+          </p>
+        </div>
       </div>
-    </div>
-  );
+    </section>
+
+    {/* CHANGE 4: Address information */}
+    <section className="details-card">
+      <h2>Address Information</h2>
+
+      <div className="details-grid">
+        <div>
+          <span>Street</span>
+          <p>{user.address.street}</p>
+        </div>
+
+        <div>
+          <span>Suite</span>
+          <p>{user.address.suite}</p>
+        </div>
+
+        <div>
+          <span>City</span>
+          <p>{user.address.city}</p>
+        </div>
+
+        <div>
+          <span>Zipcode</span>
+          <p>{user.address.zipcode}</p>
+        </div>
+
+        <div>
+          <span>Latitude</span>
+          <p>{user.address.geo.lat}</p>
+        </div>
+
+        <div>
+          <span>Longitude</span>
+          <p>{user.address.geo.lng}</p>
+        </div>
+      </div>
+    </section>
+
+    {/* CHANGE 5: Company information */}
+    <section className="details-card">
+      <h2>Company Information</h2>
+
+      <div className="company-details">
+        <div>
+          <span>Company Name</span>
+          <p>{user.company.name}</p>
+        </div>
+
+        <div>
+          <span>Catch Phrase</span>
+          <p>{user.company.catchPhrase}</p>
+        </div>
+
+        <div>
+          <span>Business Description</span>
+          <p>{user.company.bs}</p>
+        </div>
+      </div>
+    </section>
+
+    {/* CHANGE 6: Footer */}
+    <footer className="details-footer">
+      User Management Dashboard
+    </footer>
+  </div>
+);
+
 }
 
 export default UserDetails;
