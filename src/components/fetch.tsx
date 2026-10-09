@@ -200,12 +200,7 @@ if (loading) {
             >
 
               <h2 className="text-xl font-bold text-gray-800 mb-2">
-                <Link
-                  to={`/user/${user.id}`}
-                  className="text-blue-600 hover:underline"
-                >
-                  {user.name}
-                </Link>
+                   {user.name}
               </h2>
 
               <div className="space-y-1 text-gray-600">
@@ -234,6 +229,11 @@ if (loading) {
                   {user.address.city}
                 </p>
               </div>
+              <Link
+                to={`/user/${user.id}`}
+                   className="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300">
+                  View Details
+              </Link>
             </div>
           ))}
         </div>
