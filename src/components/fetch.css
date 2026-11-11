@@ -173,8 +173,11 @@ body {
   border-radius: 10px;
   padding: 22px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  transition: box-shadow 0.2s, transform 0.2s,
-    background 0.3s, border-color 0.3s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s,
+    background 0.3s,
+    border-color 0.3s;
 }
 
 .user-card:hover {
@@ -202,11 +205,13 @@ body {
 }
 
 /* Company Name */
+
 .user-card p:nth-last-of-type(2) {
   color: #2563eb;
 }
 
 /* City */
+
 .user-card p:last-of-type {
   margin-bottom: 16px;
 }
@@ -231,6 +236,47 @@ body {
 
 .details-link:hover {
   background: #1d4ed8;
+}
+
+/* =========================
+   PAGINATION
+========================= */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  margin: 30px 0;
+}
+
+.pagination button {
+  padding: 10px 20px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.pagination button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.pagination span {
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 /* =========================
@@ -409,6 +455,26 @@ body.dark-mode .details-link:hover {
   background: #1d4ed8;
 }
 
+/* Pagination */
+
+body.dark-mode .pagination span {
+  color: #e5e7eb;
+}
+
+body.dark-mode .pagination button {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+body.dark-mode .pagination button:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+body.dark-mode .pagination button:disabled {
+  background: #525252;
+  color: #d4d4d4;
+}
+
 /* Empty Message */
 
 body.dark-mode .empty-message {
@@ -474,14 +540,33 @@ body.dark-mode .error-message {
   .filter-section button {
     width: 100%;
   }
+
+  /* Mobile Pagination */
+
+  .pagination {
+    gap: 12px;
+  }
+
+  .pagination button {
+    padding: 9px 14px;
+    font-size: 12px;
+  }
+
+  .pagination span {
+    font-size: 12px;
+  }
 }
 
-/* Reduced Motion */
+/* =========================
+   REDUCED MOTION
+========================= */
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     transition: none !important;
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }

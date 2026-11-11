@@ -22,14 +22,17 @@ function Userlist() {
     () => localStorage.getItem("theme") === "dark"
   );
 
-  // CHANGE 2: Apply and save theme
+  // CHANGE 2: Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 5;
+
+  // CHANGE 3: Apply and Save Theme
   useEffect(() => {
     document.body.classList.toggle("dark-mode", darkMode);
-
     localStorage.setItem("theme", darkMode ? "dark" : "light");
   }, [darkMode]);
 
-  // CHANGE 3: Fetch Users
+  // CHANGE 4: Fetch Users
   useEffect(() => {
     async function fetchUsers() {
       try {
@@ -53,7 +56,7 @@ function Userlist() {
     fetchUsers();
   }, []);
 
-  // CHANGE 4: Search with Debounce
+  // CHANGE 5: Search with Debounce
   useEffect(() => {
     if (!searchTerm.trim()) {
       setResults([]);
@@ -73,6 +76,11 @@ function Userlist() {
 
     return () => clearTimeout(timer);
   }, [searchTerm, users]);
+
+  // CHANGE 6: Reset Page When Search or Filters Change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedCity, selectedCompany, sortBy, sortOrder]);
 
   // Loading State
   if (loading) {
@@ -96,10 +104,10 @@ function Userlist() {
     );
   }
 
-  // CHANGE 5: Search Results
+  // CHANGE 7: Search Results
   const displayedUsers = searchTerm.trim() ? results : users;
 
-  // CHANGE 6: City and Company Filtering
+  // CHANGE 8: City and Company Filtering
   const filteredUsers = displayedUsers.filter((user: any) => {
     const matchesCity =
       selectedCity === "" || user.address.city === selectedCity;
@@ -110,7 +118,7 @@ function Userlist() {
     return matchesCity && matchesCompany;
   });
 
-  // CHANGE 7: Sorting
+  // CHANGE 9: Sorting
   const sortedUsers = [...filteredUsers].sort((a: any, b: any) => {
     const valueA = a[sortBy].toLowerCase();
     const valueB = b[sortBy].toLowerCase();
@@ -120,7 +128,18 @@ function Userlist() {
     return sortOrder === "asc" ? comparison : -comparison;
   });
 
-  // CHANGE 8: Reset All Filters
+  // CHANGE 10: Pagination Logic
+  const totalPages = Math.ceil(sortedUsers.length / usersPerPage);
+
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+
+  const currentUsers = sortedUsers.slice(
+    indexOfFirstUser,
+    indexOfLastUser
+  );
+
+  // CHANGE 11: Reset All Filters
   const handleReset = () => {
     setSearchTerm("");
     setResults([]);
@@ -128,6 +147,7 @@ function Userlist() {
     setSelectedCompany("");
     setSortBy("name");
     setSortOrder("asc");
+    setCurrentPage(1);
   };
 
   return (
@@ -140,7 +160,7 @@ function Userlist() {
           <p>Total Users: {users.length}</p>
         </div>
 
-        {/* CHANGE 9: Theme Toggle Button */}
+        {/* CHANGE 12: Theme Toggle */}
         <button
           className="theme-toggle"
           onClick={() => setDarkMode(!darkMode)}
@@ -219,10 +239,6 @@ function Userlist() {
 
       </div>
 
-      {/* Results Count */}
-      <p className="results-count">
-        Showing {sortedUsers.length} of {users.length} users
-      </p>
 
       {/* User Cards */}
       {sortedUsers.length === 0 ? (
@@ -231,7 +247,7 @@ function Userlist() {
         </p>
       ) : (
         <div className="user-grid">
-          {sortedUsers.map((user: any) => (
+          {currentUsers.map((user: any) => (
             <div className="user-card" key={user.id}>
 
               <h2>{user.name}</h2>
@@ -269,6 +285,31 @@ function Userlist() {
 
             </div>
           ))}
+        </div>
+      )}
+
+      {/* CHANGE 13: Pagination Buttons */}
+      {sortedUsers.length > 0 && (
+        <div className="pagination">
+
+          <button
+            onClick={() => setCurrentPage(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+
+          <button
+            onClick={() => setCurrentPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+
         </div>
       )}
 
