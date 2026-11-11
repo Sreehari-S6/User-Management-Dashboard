@@ -1,4 +1,8 @@
 
+/* =========================
+   GLOBAL STYLES
+========================= */
+
 * {
   box-sizing: border-box;
 }
@@ -8,14 +12,24 @@ body {
   font-family: Arial, sans-serif;
   background: #f5f5f5;
   color: #333;
+  transition: background 0.3s ease, color 0.3s ease;
 }
+
+/* =========================
+   DASHBOARD CONTAINER
+========================= */
 
 .dashboard-container {
   max-width: 1200px;
+  min-height: 100vh;
   margin: auto;
   padding: 25px;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
+/* =========================
+   DASHBOARD HEADER
+========================= */
 
 .dashboard-header {
   display: flex;
@@ -53,12 +67,30 @@ body {
   margin: 8px 0 0 17px;
 }
 
-@media (max-width: 550px) {
-  .dashboard-header h1 {
-    font-size: 23px;
-  }
+/* =========================
+   THEME TOGGLE BUTTON
+========================= */
+
+.theme-toggle {
+  padding: 10px 16px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
+.theme-toggle:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+/* =========================
+   SEARCH SECTION
+========================= */
 
 .search-section input {
   width: 100%;
@@ -67,7 +99,17 @@ body {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, background 0.3s, color 0.3s;
 }
+
+.search-section input:focus {
+  border-color: #2563eb;
+}
+
+/* =========================
+   FILTER SECTION
+========================= */
 
 .filter-section {
   display: flex;
@@ -85,12 +127,25 @@ body {
   font-size: 14px;
 }
 
+.filter-section select {
+  cursor: pointer;
+}
+
 .filter-section button {
   cursor: pointer;
   background: #333;
   color: white;
   border-color: #333;
+  transition: background 0.2s;
 }
+
+.filter-section button:hover {
+  background: #555;
+}
+
+/* =========================
+   RESULTS COUNT
+========================= */
 
 .results-count {
   color: #666;
@@ -98,21 +153,28 @@ body {
   margin-bottom: 15px;
 }
 
+/* =========================
+   USER GRID
+========================= */
+
 .user-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
 
+/* =========================
+   USER CARD
+========================= */
 
-/* User card */
 .user-card {
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
   padding: 22px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition: box-shadow 0.2s, transform 0.2s,
+    background 0.3s, border-color 0.3s;
 }
 
 .user-card:hover {
@@ -139,7 +201,7 @@ body {
   font-weight: 600;
 }
 
-/* Company name */
+/* Company Name */
 .user-card p:nth-last-of-type(2) {
   color: #2563eb;
 }
@@ -149,7 +211,10 @@ body {
   margin-bottom: 16px;
 }
 
-/* Details button */
+/* =========================
+   DETAILS BUTTON
+========================= */
+
 .details-link {
   display: flex;
   align-items: center;
@@ -168,12 +233,19 @@ body {
   background: #1d4ed8;
 }
 
+/* =========================
+   EMPTY MESSAGE
+========================= */
 
 .empty-message {
   text-align: center;
   padding: 30px;
   color: #666;
 }
+
+/* =========================
+   FOOTER
+========================= */
 
 .dashboard-footer {
   text-align: center;
@@ -184,42 +256,10 @@ body {
   font-size: 13px;
 }
 
-.dashboard-state {
-  text-align: center;
-  padding: 50px 20px;
-}
+/* =========================
+   LOADING STATE
+========================= */
 
-.error-message {
-  color: red;
-}
-
-@media (max-width: 850px) {
-  .user-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 550px) {
-  .dashboard-container {
-    padding: 15px;
-  }
-
-  .dashboard-header h1 {
-    font-size: 22px;
-  }
-
-  .user-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .filter-section select,
-  .filter-section button {
-    width: 100%;
-  }
-}
-
-
-/* Loading state */
 .dashboard-state {
   min-height: 70vh;
   display: flex;
@@ -246,9 +286,202 @@ body {
   }
 }
 
-/* Error message */
+/* =========================
+   ERROR MESSAGE
+========================= */
+
 .error-message {
   color: #dc2626;
   text-align: center;
   padding: 30px;
+}
+
+.error-message button {
+  padding: 9px 18px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* ==================================================
+   DARK MODE
+================================================== */
+
+body.dark-mode {
+  background: #0b0b0b;
+  color: #e5e7eb;
+}
+
+body.dark-mode .dashboard-container {
+  background: #0b0b0b;
+}
+
+body.dark-mode .dashboard-header {
+  border-color: #303030;
+}
+
+body.dark-mode .dashboard-header h1 {
+  color: #f9fafb;
+}
+
+body.dark-mode .dashboard-header p {
+  color: #9ca3af;
+}
+
+/* Search Input */
+
+body.dark-mode .search-section input {
+  background: #171717;
+  color: #f3f4f6;
+  border-color: #383838;
+}
+
+body.dark-mode .search-section input::placeholder {
+  color: #9ca3af;
+}
+
+body.dark-mode .search-section input:focus {
+  border-color: #60a5fa;
+}
+
+/* Filters */
+
+body.dark-mode .filter-section select {
+  background: #171717;
+  color: #e5e7eb;
+  border-color: #383838;
+}
+
+body.dark-mode .filter-section button {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+body.dark-mode .filter-section button:hover {
+  background: #1d4ed8;
+}
+
+/* Results */
+
+body.dark-mode .results-count {
+  color: #9ca3af;
+}
+
+/* User Cards */
+
+body.dark-mode .user-card {
+  background: #171717;
+  border-color: #303030;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .user-card:hover {
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .user-card h2 {
+  color: #f9fafb;
+}
+
+body.dark-mode .user-card p {
+  color: #9ca3af;
+}
+
+body.dark-mode .user-card p strong {
+  color: #e5e7eb;
+}
+
+body.dark-mode .user-card p:nth-last-of-type(2) {
+  color: #60a5fa;
+}
+
+/* Details Link */
+
+body.dark-mode .details-link {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+body.dark-mode .details-link:hover {
+  background: #1d4ed8;
+}
+
+/* Empty Message */
+
+body.dark-mode .empty-message {
+  color: #9ca3af;
+}
+
+/* Footer */
+
+body.dark-mode .dashboard-footer {
+  border-color: #303030;
+  color: #9ca3af;
+}
+
+/* Loading */
+
+body.dark-mode .dashboard-state {
+  color: #9ca3af;
+}
+
+body.dark-mode .loading-spinner {
+  border-color: #383838;
+  border-top-color: #60a5fa;
+}
+
+/* Error */
+
+body.dark-mode .error-message {
+  color: #f87171;
+}
+
+/* ==================================================
+   RESPONSIVE DESIGN
+================================================== */
+
+@media (max-width: 850px) {
+  .user-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 550px) {
+  .dashboard-container {
+    padding: 15px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 22px;
+  }
+
+  .dashboard-header {
+    align-items: flex-start;
+  }
+
+  .theme-toggle {
+    width: 100%;
+  }
+
+  .user-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-section select,
+  .filter-section button {
+    width: 100%;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation-duration: 0.01ms !important;
+  }
 }

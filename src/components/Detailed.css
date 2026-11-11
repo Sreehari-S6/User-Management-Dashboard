@@ -1,11 +1,33 @@
-
+/* Main Container */
 .details-container {
   max-width: 1000px;
+  min-height: 100vh;
   margin: 0 auto;
   padding: 30px 20px;
   color: #333;
+  transition: background 0.3s, color 0.3s;
 }
 
+/* Theme Toggle */
+.theme-toggle {
+  display: block;
+  margin: 0 0 20px auto;
+  padding: 10px 16px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.theme-toggle:hover {
+  background: #1d4ed8;
+}
+
+/* Back Link */
 .back-link {
   display: inline-block;
   margin-bottom: 24px;
@@ -18,6 +40,7 @@
   text-decoration: underline;
 }
 
+/* Profile Header */
 .profile-header {
   display: flex;
   align-items: center;
@@ -63,6 +86,7 @@
   margin: 7px 0 0;
 }
 
+/* Details Cards */
 .details-card {
   padding: 24px;
   margin-bottom: 20px;
@@ -108,12 +132,14 @@
   text-decoration: underline;
 }
 
+/* Company Details */
 .company-details {
   display: flex;
   flex-direction: column;
   gap: 22px;
 }
 
+/* Footer */
 .details-footer {
   padding: 24px 0;
   margin-top: 15px;
@@ -123,6 +149,7 @@
   font-size: 13px;
 }
 
+/* Loading */
 .details-state {
   min-height: 70vh;
   display: flex;
@@ -143,6 +170,66 @@
   color: #2563eb;
 }
 
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark-mode {
+  background: #0b0b0b;
+}
+
+body.dark-mode .details-container {
+  color: #e5e7eb;
+}
+
+body.dark-mode .profile-header,
+body.dark-mode .details-card {
+  background: #171717;
+  border-color: #2a2a2a;
+}
+
+body.dark-mode .profile-header h1,
+body.dark-mode .details-card h2,
+body.dark-mode .details-card p {
+  color: #f3f4f6;
+}
+
+body.dark-mode .profile-username,
+body.dark-mode .details-card span,
+body.dark-mode .details-footer {
+  color: #9ca3af;
+}
+
+body.dark-mode .details-card h2,
+body.dark-mode .details-footer {
+  border-color: #303030;
+}
+
+body.dark-mode .profile-avatar {
+  background: #1e293b;
+  color: #60a5fa;
+}
+
+body.dark-mode .section-label,
+body.dark-mode .details-card a,
+body.dark-mode .back-link {
+  color: #60a5fa;
+}
+
+body.dark-mode .details-state {
+  color: #9ca3af;
+}
+
+/* Smooth Theme Transition */
+.details-container,
+.profile-header,
+.details-card,
+.details-footer {
+  transition: background 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+/* Responsive */
 @media (max-width: 550px) {
   .details-container {
     padding: 20px 14px;
