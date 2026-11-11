@@ -75,12 +75,12 @@ if (!user) return null;
 
 return (
   <div className="details-container">
-    {/* CHANGE 1: Simple navigation */}
+   
     <Link to="/" className="back-link">
       ← Back to Users
     </Link>
 
-    {/* CHANGE 2: User profile header */}
+   
     <header className="profile-header">
       <div className="profile-avatar">
         {user.name
@@ -100,7 +100,7 @@ return (
       </div>
     </header>
 
-    {/* CHANGE 3: Basic information */}
+
     <section className="details-card">
       <h2>Basic Information</h2>
 
@@ -144,7 +144,7 @@ return (
       </div>
     </section>
 
-    {/* CHANGE 4: Address information */}
+   
     <section className="details-card">
       <h2>Address Information</h2>
 
@@ -181,7 +181,7 @@ return (
       </div>
     </section>
 
-    {/* CHANGE 5: Company information */}
+   
     <section className="details-card">
       <h2>Company Information</h2>
 
